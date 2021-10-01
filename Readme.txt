@@ -1,16 +1,9 @@
-Catel project template readme
-=============================
 
-Congratulations with creating a new Catel project:
+WpfElementNameBindingTester 
+===========================
 
-CatelWPFApplication1
+This project was originally created from the original Catel project template.
 
-To get this project up and running, perform the following actions:
+It was created to focus a problem in the timing of WPF button command parameter binding, see the discussion at https://stackoverflow.com/questions/69392534/binding-button-commandparameter-to-datagrid-selecteditem-off-by-one-change/
 
-1) Right-click on the project => Manage NuGet packages...
-2) Search for Catel.Extensions.Controls
-3) Install the NuGet package
-4) Build and run the application
-
-
-For more information and support, visit http://www.catelproject.com
+For more information about the Catel framework, visit http://www.catelproject.com
