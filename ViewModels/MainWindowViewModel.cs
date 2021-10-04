@@ -68,39 +68,57 @@ namespace CatelWPFApplication1.ViewModels
 
         private bool OnViaElementNameCommandCanExecute(Person person)
         {
+            // on selection change of the datagrid, the parameter is 
+            // one click behind, unless explicity triggered in the
+            // OnPropertyChanged handler.
             TracePersonUsage(person);
             return person is not null;
         }
 
         private async Task OnViaElementNameCommandExecute(Person person)
         {
+            // changing the SelectedPerson will affect hte datagrid.
+            // this change is exposed immediatly to both CanExecute functions
             SelectedPerson = null;
         }
         public TaskCommand<Person> ViaVmCommand { get; }
 
         private bool OnViaVmCommandCanExecute(Person person)
         {
+            // on selection change of the datagrid, the parameter
+            // is always one click behind
             TracePersonUsage(person);
             return person is not null;
         }
 
         private async Task OnViaVmCommandExecute(Person person)
         {
+            // changing the SelectedPerson will affect hte datagrid.
+            // this change is exposed immediatly to both CanExecute functions
             SelectedPerson = PersonList.FirstOrDefault();
         }
         #endregion
 
         #region Methods
-        // TODO: Create your methods here
         protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            _dispatcherService?.BeginInvoke(() =>
+
+            _dispatcherService?.BeginInvoke(async () =>
             {
-                Task.Delay(1000).GetAwaiter().GetResult();
+                // a long delay for easier spotting of the
+                // InvalidateCommands result and tracing
+                // for workaround purpose, a delay of just 10 ms will do
+                await Task.Delay(2000);
                 ViewModelCommandManager.InvalidateCommands();
             });
         }
+
+        /// <summary>
+        /// formatted output for the On_**_CommandCanExecute functions
+        /// </summary>
+        /// <param name="person"></param>
+        /// <param name="callerMember"></param>
         private void TracePersonUsage(Person person, [CallerMemberName] string callerMember = null)
         {
             var parameterFirstName = person is null ? "null" : person.FirstName;
